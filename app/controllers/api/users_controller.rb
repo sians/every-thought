@@ -1,0 +1,8 @@
+class Api::UsersController < Api::BaseController
+  before_action :authenticate_user!
+
+  def me
+    # binding.pry
+    json_response current_user
+  end
+end
