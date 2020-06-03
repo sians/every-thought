@@ -10,10 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_02_111755) do
+ActiveRecord::Schema.define(version: 2020_06_02_145732) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "collections", force: :cascade do |t|
+    t.string "name"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_collections_on_user_id"
+  end
 
   create_table "jwt_blacklists", force: :cascade do |t|
     t.string "jti"
@@ -21,6 +29,29 @@ ActiveRecord::Schema.define(version: 2020_06_02_111755) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["jti"], name: "index_jwt_blacklists_on_jti"
+  end
+
+  create_table "lists", force: :cascade do |t|
+    t.string "name"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "collection_id"
+    t.index ["collection_id"], name: "index_lists_on_collection_id"
+    t.index ["user_id"], name: "index_lists_on_user_id"
+  end
+
+  create_table "thoughts", force: :cascade do |t|
+    t.string "title"
+    t.boolean "archived"
+    t.integer "status"
+    t.string "date_completed"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "list_id", null: false
+    t.index ["list_id"], name: "index_thoughts_on_list_id"
+    t.index ["user_id"], name: "index_thoughts_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -35,4 +66,9 @@ ActiveRecord::Schema.define(version: 2020_06_02_111755) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "collections", "users"
+  add_foreign_key "lists", "collections"
+  add_foreign_key "lists", "users"
+  add_foreign_key "thoughts", "lists"
+  add_foreign_key "thoughts", "users"
 end

@@ -9,4 +9,8 @@ class User < ApplicationRecord
          :jwt_authenticatable,
          jwt_revocation_strategy: JwtBlacklist,
          password_length: 6..128
+
+  has_many :lists
+  has_many :thoughts
+  has_many :collections
 end
