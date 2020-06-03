@@ -10,6 +10,26 @@ class ApplicationController < ActionController::API
     render(json: json_serializer(data).new(data, options), status: status)
   end
 
+
+  def render_unprocessable_entity!(errors)
+    json_response(
+      nil,
+      meta: { status: :unprocessable_entity, message: serialize_errors(errors) },
+      status: :unprocessable_entity,
+    )
+  end
+
+  def user_not_authorized(exception)
+    json_response(
+      nil,
+      status: :unauthorized,
+      meta: {
+        status: 'KO',
+        message: "Unauthorized #{exception.policy.class.to_s.underscore.camelize}.#{exception.query}"
+      },
+    )
+  end
+
   private
 
   def json_serializer(data)

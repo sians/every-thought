@@ -14,5 +14,9 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :collections, except: [:new, :edit]
+    resources :lists, except: [:new, :edit]
+    resources :thoughts, except: [:show, :new, :edit]
+
   end
 end
