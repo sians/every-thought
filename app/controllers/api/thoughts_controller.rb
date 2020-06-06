@@ -2,13 +2,14 @@ class Api::ThoughtsController < Api::BaseController
   before_action :set_thought, only: [:update]
 
   def index
-    @thoughts = Thought.where(user: current_user)
+    @thoughts = Thought.where(user: current_user).order(updated_at: :desc)
 
     json_response(@thoughts)
   end
 
   def create
     create_params = thought_params.merge(user: current_user)
+
     service = Thoughts::CreateService.new(create_params)
 
     if service.call

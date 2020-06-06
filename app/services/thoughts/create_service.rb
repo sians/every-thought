@@ -10,7 +10,6 @@ class Thoughts::CreateService < BaseService
 
   validates :title, presence: true
   validates :user, presence: true
-  validates :list_id, presence: true
 
   def call_after_validation
     create_thought
@@ -19,14 +18,15 @@ class Thoughts::CreateService < BaseService
   end
 
   def create_thought
-    @list = List.where(user: @user).find(@list_id)
+
+    @list = List.where(user: @user).find(@list_id) if @list_id
 
     @thought = Thought.create(
       title: @title,
       archived: false,
       status: 0,
       user: @user,
-      list: @list
+      list: @list || nil
       )
   end
 

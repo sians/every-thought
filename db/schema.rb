@@ -49,7 +49,7 @@ ActiveRecord::Schema.define(version: 2020_06_02_145732) do
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "list_id", null: false
+    t.bigint "list_id"
     t.index ["list_id"], name: "index_thoughts_on_list_id"
     t.index ["user_id"], name: "index_thoughts_on_user_id"
   end
